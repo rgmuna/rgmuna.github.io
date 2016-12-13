@@ -4,6 +4,10 @@ Creating a page where every time the user hits the "Roll Dice" button, the scree
 
 1) Write down pseudocode for the following program.
 
+when a button is clicked, generate a random number between 1 and 6 for each dice.
+when the number is generated, output to html
+
+
 2) Follow the steps below to write your code.
 * generate a random number between 1 - 6 and store to a variable, random1
 * generate a random number between 1 - 6 and store to a variable, random2
@@ -15,3 +19,18 @@ Creating a page where every time the user hits the "Roll Dice" button, the scree
 3) Check to see if the Dice Roll has been clicked, if it has run the diceRoll function.
 
 */
+
+
+document.getElementById("roll-dice").onclick = function() {diceRoll()};
+
+function diceRoll (){
+  var random1 = Math.ceil(Math.random()*6);
+  var random2 = Math.ceil(Math.random()*6);
+
+  var firstDie = 'dice-' + random1;
+  var secondDie = 'dice-' + random2;
+
+  document.getElementById('first-die').className = firstDie;
+  document.getElementById('second-die').className = secondDie;
+
+}

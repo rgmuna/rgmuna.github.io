@@ -1,3 +1,10 @@
+/*stuff to add:
+- hover over button and it changes color
+- center everything on page and give better fonts
+- hover over button shows favorites
+- 
+
+*/
 var startupX = ['Uber', 'Google', 'Amazon', 'Apple', 'Facebook', 'Twitter'];
 var startupY = ['Slack', 'Trello', 'Tesla', 'Hyperloop', 'Harvest'];
 
