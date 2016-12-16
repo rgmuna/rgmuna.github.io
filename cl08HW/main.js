@@ -7,7 +7,7 @@ function addToList($list, thing) {
   $list.append($thingLi);
 }
 
-$button.on('click', function() {
+$button.on('click', function(event) {
   event.preventDefault();
   $bottlesBeer.empty();
   var numBeers = prompt('How many beers are on the wall?');
