@@ -73,6 +73,6 @@ $(document).ready(function() { //onload equivalent
      $(this).removeClass('active')
    }
  });
- 
+
 
 });
