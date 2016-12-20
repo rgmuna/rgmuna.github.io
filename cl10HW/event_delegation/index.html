@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>A Few of My Favorite Things</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Hello World, Once More</h1>
+
+  <h2>Favorite Things</h2>
+
+  <ul id="fav-list"></ul>
+
+  <form>
+    <input id="new-thing" />
+    <input id="new-thing-button" type="submit" value="Create new thing"></submit>
+  </form>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="main.js" type="text/javascript" charset="utf-8" async defer></script>
+  <script src="handlebars-v4.0.5.js"></script>
+
+  <script id="things" type="text/x-handlebars-template">
+    <li> {{todo}} <a href='#' class="complete"> Complete</a><a href='#' class="delete"> Delete</a> </li>
+  </script>
+
+</body>
+</html>

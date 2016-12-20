@@ -1,0 +1,26 @@
+#completed-list-div {
+  display: none;
+}
+
+.complete-task {
+  color: blue;
+  cursor: pointer;
+}
+
+.completed {
+  text-decoration: line-through;
+}
+
+.inactive {
+  color: #777;
+}
+
+.active{
+  background-color: yellow;
+}
+
+.hover-class{
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+}
