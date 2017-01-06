@@ -1,5 +1,6 @@
-var $button = $('#sing-button');
-var $bottlesBeer = $('#bottles-beer');
+var $singButton = $('#sing-button');
+var $bottlesBeer = $('.bottles-beer');
+var $clearButton = $('#clear-button');
 
 function addToList($list, thing) {
   var $thingLi = $('<li>');
@@ -7,9 +8,11 @@ function addToList($list, thing) {
   $list.append($thingLi);
 }
 
-$button.on('click', function(event) {
+$singButton.on('click', function(event) {
   event.preventDefault();
   $bottlesBeer.empty();
+  $singButton.remove();
+
   var numBeers = prompt('How many beers are on the wall?');
   if(isNaN(numBeers)){
     alert("Please enter a number!");
@@ -31,5 +34,11 @@ $button.on('click', function(event) {
       }
     }
   }
+  $bottlesBeer.removeClass( ".bottles-beer" ).addClass( "bottles-beer-drank" );
+});
 
+$clearButton.on('click', function(event) {
+  $bottlesBeer.empty();
+  $bottlesBeer.removeClass( "bottles-beer-drank" ).addClass( ".bottles-beer" );
+  //$('body').append() //append new button
 });
