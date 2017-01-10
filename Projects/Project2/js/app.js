@@ -32,12 +32,12 @@ function jsonData(jsonLink, source) {
           else if(source === "BBC"){
             bbcAssignments(response);
           }
-          else if(source === "Weather"){
+          else if(source === "weather"){
             weatherAssignments(response);
           }
       },
       error: function() {
-        console.log("error");
+        alert('Error: Cannot load page');
       }
   });
 }
@@ -74,6 +74,14 @@ $(document).ready(function() {
     jsonData(weatherUrl, "weather");
   })
 
+  $(document).on('keyup',function(evt) { //use escape key to remove popup
+    if (evt.keyCode == 27) {
+       if(!$popUp.hasClass("hidden")){
+         $popUp.addClass("hidden");
+       };
+    }
+  });
+
 });
 
 //function for appending the main feed to the main-----------------------------
@@ -103,6 +111,7 @@ function appendMainFeed(handlebarArray){
       $('#popUp #article-link').attr('href', popUpLink);
       $closer.on("click", function(){ //event listner for X
         $popUp.addClass("hidden");
+
       });
     });
   });
@@ -156,11 +165,11 @@ function bbcAssignments(JSONresp){
 //create each article object and push into array
   for (var element in JSONresp.articles){
     var jtitle = JSONresp.articles[element].title;
-    var jshares = "awkward";
+    var jshares = '';
     var jimage = JSONresp.articles[element].urlToImage;
     var jexcerpt = JSONresp.articles[element].description;
     var jlink = JSONresp.articles[element].url;
-    var jcontent = 'oops nothing';
+    var jcontent = '';
 //define each object and load into the array
     pulledData.content.push(
       {title: jtitle,
@@ -182,10 +191,7 @@ function timeConverter(UNIX_timestamp){
   var year = a.getFullYear();
   var month = months[a.getMonth()];
   var date = a.getDate();
-  var hour = a.getHours();
-  var min = a.getMinutes();
-  var sec = a.getSeconds();
-  var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+  var time = date + ' ' + month + ' ' + year ;
   return time;
 }
 
@@ -193,27 +199,64 @@ function weatherAssignments(JSONresp){
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
   $sourceName.text("Los Angeles Weather");
-//create each article object and push into array
-  for (var element in JSONresp.articles){
-    var unixDate = JSONresp.list[element].dt;
-    var jdate = timeConverter(unixDate);
 
-    var jshares = "awkward";
-    var jimage = JSONresp.articles[element].urlToImage;
-    var jexcerpt = JSONresp.articles[element].description;
-    var jlink = JSONresp.articles[element].url;
-    var jcontent = 'oops nothing';
+//create each article object and push into array
+  for (var element in JSONresp.list){
+    var unixDate = JSONresp.list[element].dt; //in place of title
+    var jdate = timeConverter(unixDate); //convert unix date to readable date
+    var jweather = JSONresp.list[element].weather[0].description; //in place of in place of excerpt
+    var imageID = JSONresp.list[element].weather[0].id; //image stuff
+    var imageCode = returnWeatherCode(imageID);
+    var jimage = 'http://openweathermap.org/img/w/' + imageCode + '.png';
+    var jmin =  JSONresp.list[element].temp.min;
+    var jmax =  JSONresp.list[element].temp.max;
+    var jMinMax = 'Max Temp: ' + jmax + '\xB0F  Min Temp: ' + jmin + '\xB0F'; //in place of shares
+    var jpressure = 'Pressure: ' + JSONresp.list[element].pressure + 'hPa';
+    var jhumidity = 'Humidity: ' + JSONresp.list[element].humidity + '%';
+    var jcloudiness = 'Cloudiness: ' + JSONresp.list[element].clouds + '%';
+    var jcontent = jMinMax + '\n' + jpressure + '\n' + jhumidity + '\n' + jcloudiness;
+
 //define each object and load into the array
     pulledData.content.push(
-      {title: jtitle,
-      shares: jshares,
+      {title: jdate,
+      shares: jweather,
       image: jimage,
-      excerpt: jexcerpt,
-      link: jlink,
+      excerpt: jMinMax,
+      link: 'http://openweathermap.org/city/5368361',
       content: jcontent
       }
     );
   }
 //compile the data and load into DOM
   appendMainFeed(pulledData.content);
+}
+
+function returnWeatherCode(id){
+    if(id<299){
+      return '11d';
+    }
+    else if(id<399){
+      return '09d';
+    }
+    else if(id<=504){
+      return '10d';
+    }
+    else if(id===511){
+      return '13d';
+    }
+    else if(id<532){
+      return '09d';
+    }
+    else if(id<699){
+      return '13d';
+    }
+    else if(id<799){
+      return '50d';
+    }
+    else if(id===800){
+      return '01d';
+    }
+    else if(id<899){
+      return '04d';
+    }
 }

@@ -34,7 +34,7 @@ FavApp.removeListItem = function($item){
 
 $(document).ready(function() { //onload equivalent
   var $thingList = $('#fav-list');
-  var $things = $('.fav-thing');
+  var $things = $('.fav-thing'); //not sure this does anything 
   var $button = $('#new-thing-button');
   var $newThingInput = $('#new-thing');
 
@@ -55,7 +55,7 @@ $(document).ready(function() { //onload equivalent
   });
 
 //handles hovering over items
- $thingList.on('mouseenter mouseleave', 'li', function(e) {
+  $thingList.on('mouseenter mouseleave', 'li', function(e) {
    if(e.type === 'mouseenter'){
      $(this).removeClass('inactive');
      $(this).siblings().addClass('inactive');
@@ -64,7 +64,7 @@ $(document).ready(function() { //onload equivalent
      $(this).siblings().removeClass('inactive');
      $(this).removeClass('active')
    }
- });
+  });
 
 //event handler for delete link
   $thingList.on('click', 'a.delete', function(event) {
