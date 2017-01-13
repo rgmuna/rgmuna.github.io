@@ -3,6 +3,7 @@
 //initialize object array for handlebars
 var pulledData = {};
 var $popUp = $("#popUp");
+var nasaIndicator = 0;
 
 var bbcUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=f3a927224af947e290a444fdae7242ca";
 var mashUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://mashable.com/stories.json"
@@ -94,6 +95,7 @@ $(document).ready(function() {
 
   $mashableButton.on("click", function(event){
     event.preventDefault();
+    nasaIndicator = 0;
     popUpToggle("on");
     $('#main').empty();
     jsonData(mashUrl, "Mashable");
@@ -101,6 +103,7 @@ $(document).ready(function() {
 
   $bbcButton.on("click", function(event){
     event.preventDefault();
+    nasaIndicator = 0;
     popUpToggle("on");
     $('#main').empty();
     jsonData(bbcUrl, "BBC");
@@ -108,6 +111,7 @@ $(document).ready(function() {
 
   $weatherButton.on("click", function(event){
     event.preventDefault();
+    nasaIndicator = 0;
     popUpToggle("on");
     $('#main').empty();
     jsonData(weatherUrl, "weather");
@@ -115,6 +119,7 @@ $(document).ready(function() {
 
   $nasaButton.on("click", function(event){
     event.preventDefault();
+    nasaIndicator = 1;
     popUpToggle("on");
     $('#main').empty();
     getNasaData();
@@ -128,19 +133,15 @@ $(document).ready(function() {
     }
   });
 
-  $search.on('click', function(event){ //FIX ME FOR SEARCH STUFF -------------------------------------------xxxxx
-    // $search.addClass('active');
-    // setTimeout(function(){
-    //   $('input').focus();
-    // }, 100)
-
-    $search.addClass('active').promise().done($('input').focus());
-
+  $search.on('click', function(event){
+    $search.toggleClass('active');
+    setTimeout(function(){
+      $('input').focus();
+    }, 100)
   });
 
 });
 
-//function for appending the main feed to the main-----------------------------
 function appendMainFeed(handlebarArray){
   var $main = $("#main"); //place to put all the articles
 
@@ -156,6 +157,7 @@ function appendMainFeed(handlebarArray){
     var popUpTitle = pulledData.content[index].title;
     var popUpContent = pulledData.content[index].content;
     var popUpLink = pulledData.content[index].link;
+    var popUpImage = pulledData.content[index].image;
     var $closer = $(".closePopUp");
 
     $(this).on("click", function(event){ //event listeners
@@ -163,8 +165,18 @@ function appendMainFeed(handlebarArray){
       $popUp.removeClass("hidden");
       $popUp.removeClass("loader");
       $('#popUp h1').text(popUpTitle);
-      $('#popUp p').html(popUpContent);
-      $('#popUp #article-link').attr('href', popUpLink);
+      if(nasaIndicator===1){
+        $('#popUp p').html(popUpContent);
+        var img = $('<img>'); //Equivalent: $(document.createElement('img'))
+        img.attr('src', popUpImage);
+        img.appendTo('#popUp p');
+        $('#popUp #article-link').addClass("hidden");
+      }
+      else if(nasaIndicator===0){
+        $('#popUp p').html(popUpContent);
+        $('#popUp #article-link').removeClass("hidden");
+        $('#popUp #article-link').attr('href', popUpLink);
+      }
       $closer.on("click", function(){ //event listner for X
         $popUp.addClass("hidden");
 
@@ -318,32 +330,28 @@ function returnWeatherCode(id){
     }
 }
 
-var test = [];
-function nasaAssignments(dataArray){
-  test = dataArray;
-  console.log(test[0].title);
 
-
+function nasaAssignments(JSONresp){
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
   $sourceName.text("NASA Pics");
 
   //console.log(JSONresp1[0]);
 //create each article object and push into array
-//   for (var element in JSONresp){
-//     var jtitle = JSONresp[element].title;
-//     var jshares = JSONresp[element].date;
-//     var jimage = JSONresp[element].url;
-//     var jcontent = JSONresp[element].explanation;
-// //define each object and load into the array
-//     pulledData.content.push(
-//       {title: jtitle,
-//       shares: jshares,
-//       image: jimage,
-//       content: jcontent
-//       }
-//     );
-//   }
-// //compile the data and load into DOM
-//   appendMainFeed(pulledData.content);
+  for (var element in JSONresp){
+    var jtitle = JSONresp[element].title;
+    var jshares = JSONresp[element].date;
+    var jimage = JSONresp[element].url;
+    var jcontent = JSONresp[element].explanation;
+//define each object and load into the array
+    pulledData.content.push(
+      {title: jtitle,
+      shares: jshares,
+      image: jimage,
+      content: jcontent
+      }
+    );
+  }
+//compile the data and load into DOM
+  appendMainFeed(pulledData.content);
 }
