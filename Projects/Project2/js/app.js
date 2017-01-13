@@ -7,6 +7,7 @@ var $popUp = $("#popUp");
 var bbcUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=f3a927224af947e290a444fdae7242ca";
 var mashUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://mashable.com/stories.json"
 var weatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?id=5368361&APPID=60a9e19468acc3046f659f9bc175f8a8&units=imperial"
+var nasaUrl = 'https://api.nasa.gov/planetary/apod?api_key=H0RnwzmfBVSEpcfmVnUf9aGc8dh74vDGVNxuxrY5&date=' //add date to end YYYY-MM-DD
 
 //compile handlebars -----------------------------
 pulledData.compileMainItems = function(item){
@@ -27,7 +28,7 @@ function jsonData(jsonLink, source) {
       success: function( response ) {
           popUpToggle("off");
           if(source === "Mashable"){
-            MashableAssignments(response);
+            mashableAssignments(response);
           }
           else if(source === "BBC"){
             bbcAssignments(response);
@@ -42,6 +43,42 @@ function jsonData(jsonLink, source) {
   });
 }
 
+//function that creates all the nasa urls for different days and performs the ajax request to make one JSON array
+function getNasaData(){
+
+  //var numDays = prompt('How many days of pictures?'); //if u want to prompt for number of days
+  //create array of dates for the past 10 days
+  var todayDate = moment().format('YYYY-MM-DD');
+  var dateArray = [];
+  //for(i=0; i<numDays; i++){ //if u want to prompt for number of days
+  for(i=0; i<10; i++){
+    var ddate = moment().subtract(i, 'days').format('YYYY-MM-DD');
+    dateArray.push(ddate);
+  }
+
+  var JSONarray = {};
+//  for (i=0; i < numDays; i++){ //if u want to prompt for number of days
+  for (i=0; i < 10; i++){
+    (function(i){
+        $.ajax(
+          {
+            type: "GET",
+            url: nasaUrl + dateArray[i],
+            data: {format: JSON},
+            success: function(request) {
+                        JSONarray[i] = request;
+                        if(i===9){
+                          nasaAssignments(JSONarray);
+                        }
+                    }
+            //error: function() {alert('Error: Cannot load page')};
+          });
+      })(i);
+  }
+  popUpToggle("off");
+
+}
+
 
 $(document).ready(function() {
 
@@ -52,6 +89,8 @@ $(document).ready(function() {
   var $mashableButton = $("#mashable-button");
   var $bbcButton = $("#bbc-button");
   var $weatherButton = $("#weather-button");
+  var $nasaButton = $("#nasa-button");
+  var $search = $('#search');
 
   $mashableButton.on("click", function(event){
     event.preventDefault();
@@ -74,12 +113,29 @@ $(document).ready(function() {
     jsonData(weatherUrl, "weather");
   })
 
+  $nasaButton.on("click", function(event){
+    event.preventDefault();
+    popUpToggle("on");
+    $('#main').empty();
+    getNasaData();
+  })
+
   $(document).on('keyup',function(evt) { //use escape key to remove popup
     if (evt.keyCode == 27) {
        if(!$popUp.hasClass("hidden")){
          $popUp.addClass("hidden");
        };
     }
+  });
+
+  $search.on('click', function(event){ //FIX ME FOR SEARCH STUFF -------------------------------------------xxxxx
+    // $search.addClass('active');
+    // setTimeout(function(){
+    //   $('input').focus();
+    // }, 100)
+
+    $search.addClass('active').promise().done($('input').focus());
+
   });
 
 });
@@ -107,7 +163,7 @@ function appendMainFeed(handlebarArray){
       $popUp.removeClass("hidden");
       $popUp.removeClass("loader");
       $('#popUp h1').text(popUpTitle);
-      $('#popUp p').text(popUpContent);
+      $('#popUp p').html(popUpContent);
       $('#popUp #article-link').attr('href', popUpLink);
       $closer.on("click", function(){ //event listner for X
         $popUp.addClass("hidden");
@@ -131,7 +187,8 @@ function popUpToggle(state){
 }
 
 //Create pulledData object for MASHABLE -----------------
-function MashableAssignments(JSONresp){
+function mashableAssignments(JSONresp){
+
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
   $sourceName.text("Mashable");
@@ -214,7 +271,7 @@ function weatherAssignments(JSONresp){
     var jpressure = 'Pressure: ' + JSONresp.list[element].pressure + 'hPa';
     var jhumidity = 'Humidity: ' + JSONresp.list[element].humidity + '%';
     var jcloudiness = 'Cloudiness: ' + JSONresp.list[element].clouds + '%';
-    var jcontent = jMinMax + '\n' + jpressure + '\n' + jhumidity + '\n' + jcloudiness;
+    var jcontent = 'Max Temp: ' + jmax + '\xB0F' + '<br />' + 'Min Temp: ' + jmin + '\xB0F' + '<br />' + jpressure + '<br />' + jhumidity + '<br />' + jcloudiness;
 
 //define each object and load into the array
     pulledData.content.push(
@@ -259,4 +316,34 @@ function returnWeatherCode(id){
     else if(id<899){
       return '04d';
     }
+}
+
+var test = [];
+function nasaAssignments(dataArray){
+  test = dataArray;
+  console.log(test[0].title);
+
+
+  pulledData.content = []; //array with all the objects for handlebars
+  var $sourceName = $("#source-name");
+  $sourceName.text("NASA Pics");
+
+  //console.log(JSONresp1[0]);
+//create each article object and push into array
+//   for (var element in JSONresp){
+//     var jtitle = JSONresp[element].title;
+//     var jshares = JSONresp[element].date;
+//     var jimage = JSONresp[element].url;
+//     var jcontent = JSONresp[element].explanation;
+// //define each object and load into the array
+//     pulledData.content.push(
+//       {title: jtitle,
+//       shares: jshares,
+//       image: jimage,
+//       content: jcontent
+//       }
+//     );
+//   }
+// //compile the data and load into DOM
+//   appendMainFeed(pulledData.content);
 }
