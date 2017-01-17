@@ -1,9 +1,11 @@
 
 
+//local server in terminal: http-server -p 3000
+
 //initialize object array for handlebars
 var pulledData = {};
 var $popUp = $("#popUp");
-var nasaIndicator = 0;
+var nasaIndicator = 0; //used to indicate how to attach to DOM
 
 var bbcUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=f3a927224af947e290a444fdae7242ca";
 var mashUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://mashable.com/stories.json"
@@ -47,19 +49,19 @@ function jsonData(jsonLink, source) {
 //function that creates all the nasa urls for different days and performs the ajax request to make one JSON array
 function getNasaData(){
 
-  //var numDays = prompt('How many days of pictures?'); //if u want to prompt for number of days
+  var numDays = prompt('How many days of pictures?'); //if u want to prompt for number of days
   //create array of dates for the past 10 days
   var todayDate = moment().format('YYYY-MM-DD');
   var dateArray = [];
-  //for(i=0; i<numDays; i++){ //if u want to prompt for number of days
-  for(i=0; i<10; i++){
+  for(i=0; i<numDays; i++){ //if u want to prompt for number of days
+  //for(i=0; i<10; i++){
     var ddate = moment().subtract(i, 'days').format('YYYY-MM-DD');
     dateArray.push(ddate);
   }
 
   var JSONarray = {};
-//  for (i=0; i < numDays; i++){ //if u want to prompt for number of days
-  for (i=0; i < 10; i++){
+  for (i=0; i < numDays; i++){ //if u want to prompt for number of days
+//  for (i=0; i < 10; i++){
     (function(i){
         $.ajax(
           {
@@ -68,7 +70,7 @@ function getNasaData(){
             data: {format: JSON},
             success: function(request) {
                         JSONarray[i] = request;
-                        if(i===9){
+                        if(i===(numDays-1)){
                           nasaAssignments(JSONarray);
                         }
                     }
@@ -77,7 +79,6 @@ function getNasaData(){
       })(i);
   }
   popUpToggle("off");
-
 }
 
 
@@ -126,6 +127,7 @@ $(document).ready(function() {
   })
 
   $(document).on('keyup',function(evt) { //use escape key to remove popup
+    event.preventDefault();
     if (evt.keyCode == 27) {
        if(!$popUp.hasClass("hidden")){
          $popUp.addClass("hidden");
@@ -133,14 +135,50 @@ $(document).ready(function() {
     }
   });
 
+  $search.on('keyup',function(evt) { //use enter key to remove search
+    event.preventDefault();
+    if (evt.keyCode == 13) {
+      $('input').val('');
+      $search.removeClass('active');
+    }
+  });
+
   $search.on('click', function(event){
+    event.preventDefault();
     $search.toggleClass('active');
     setTimeout(function(){
       $('input').focus();
     }, 100)
   });
 
+  $('input').keyup(function(e){
+    event.preventDefault();
+    if( e.which == 8 || e.which == 46 ){
+      $('h3').parent('a').parent('section').parent('article').removeClass('hidden');
+      searchFilter($('input').val())
+    };
+    searchFilter($('input').val());
+  });
+
 });
+
+function searchFilter(searchValue){
+  var data = pulledData.content;
+  var options = {tokenize: true, matchAllTokens: true, keys: ['title'], id: 'title'};
+  var fuse = new Fuse(data, options);
+  var searchResult = fuse.search(searchValue);
+
+  if(searchResult.length === 0){
+    $('h3').parent('a').parent('section').parent('article').removeClass('hidden');
+  }
+  else{
+    data.forEach(function(num, index){
+      if(searchResult.indexOf(num.title) === -1){ //if an element in the original array isn't found in the filter
+        $('h3')[index].parentNode.parentNode.parentNode.classList.add("hidden")
+      }
+    })
+  }
+}
 
 function appendMainFeed(handlebarArray){
   var $main = $("#main"); //place to put all the articles
