@@ -12,14 +12,14 @@ var mashUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://mashable
 var weatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?id=5368361&APPID=60a9e19468acc3046f659f9bc175f8a8&units=imperial"
 var nasaUrl = 'https://api.nasa.gov/planetary/apod?api_key=H0RnwzmfBVSEpcfmVnUf9aGc8dh74vDGVNxuxrY5&date=' //add date to end YYYY-MM-DD
 
-//compile handlebars -----------------------------
+//compile handlebars
 pulledData.compileMainItems = function(item){
   var source = $('#article-template').html(); //get source from HTML on what complie should look like
   var template = Handlebars.compile(source); //complie using Handlebars
   return template(item); //for the item that needs compiling, return using the template
 };
 
-//function that pulls JSON data-----------------------------
+//function that pulls JSON data
 function jsonData(jsonLink, source) {
   $.ajax({
       url: jsonLink,
@@ -48,20 +48,19 @@ function jsonData(jsonLink, source) {
 
 //function that creates all the nasa urls for different days and performs the ajax request to make one JSON array
 function getNasaData(){
-
-  var numDays = prompt('How many days of pictures?'); //if u want to prompt for number of days
+  var numDays = prompt('How many days of pictures would you like?'); //if u want to prompt for number of days
+  while(isNaN(numDays)){ //make sure input is a number
+    var numDays = prompt('Please enter a value for how many days worth of pictures:');
+  }
   //create array of dates for the past 10 days
   var todayDate = moment().format('YYYY-MM-DD');
   var dateArray = [];
-  for(i=0; i<numDays; i++){ //if u want to prompt for number of days
-  //for(i=0; i<10; i++){
+  for(i=0; i<numDays; i++){ //create urls for number of days
     var ddate = moment().subtract(i, 'days').format('YYYY-MM-DD');
     dateArray.push(ddate);
   }
-
   var JSONarray = {};
-  for (i=0; i < numDays; i++){ //if u want to prompt for number of days
-//  for (i=0; i < 10; i++){
+  for (i=0; i < numDays; i++){
     (function(i){
         $.ajax(
           {
@@ -85,7 +84,6 @@ function getNasaData(){
 $(document).ready(function() {
 
   popUpToggle("on"); //loading pop up
-
   jsonData(mashUrl, "Mashable"); //initalize first source
 
   var $mashableButton = $("#mashable-button");
@@ -143,7 +141,7 @@ $(document).ready(function() {
     }
   });
 
-  $search.on('click', function(event){
+  $search.on('click', function(event){ //press search and focus on search box
     event.preventDefault();
     $search.toggleClass('active');
     setTimeout(function(){
@@ -151,7 +149,7 @@ $(document).ready(function() {
     }, 100)
   });
 
-  $('input').keyup(function(e){
+  $('input').keyup(function(e){ //takes in search input and runs filter function
     event.preventDefault();
     if( e.which == 8 || e.which == 46 ){
       $('h3').parent('a').parent('section').parent('article').removeClass('hidden');
@@ -162,9 +160,10 @@ $(document).ready(function() {
 
 });
 
+//function for filtering feeds based on search value
 function searchFilter(searchValue){
   var data = pulledData.content;
-  var options = {tokenize: true, matchAllTokens: true, keys: ['title'], id: 'title'};
+  var options = {tokenize: true, matchAllTokens: true, minMatchCharLength: 2, keys: ['title'], id: 'title'};
   var fuse = new Fuse(data, options);
   var searchResult = fuse.search(searchValue);
 
@@ -180,18 +179,15 @@ function searchFilter(searchValue){
   }
 }
 
+//compiles output of each function and appends to the DOM
 function appendMainFeed(handlebarArray){
   var $main = $("#main"); //place to put all the articles
-
   for(var i=0; i<handlebarArray.length; i++){
     var itemCompiled = pulledData.compileMainItems(handlebarArray[i]); //compile each item from initial array
     $main.append(itemCompiled); //append each compiled item to the correct list in the DOM
-
   }
-
   //attach event listeners to each title link
   $("h3").each(function(index){
-    //console.log(pulledData.content[index].title);
     var popUpTitle = pulledData.content[index].title;
     var popUpContent = pulledData.content[index].content;
     var popUpLink = pulledData.content[index].link;
@@ -203,19 +199,19 @@ function appendMainFeed(handlebarArray){
       $popUp.removeClass("hidden");
       $popUp.removeClass("loader");
       $('#popUp h1').text(popUpTitle);
-      if(nasaIndicator===1){
+      if(nasaIndicator===1){ //special layout for NASA source for appending image to content
         $('#popUp p').html(popUpContent);
-        var img = $('<img>'); //Equivalent: $(document.createElement('img'))
+        var img = $('<img>');
         img.attr('src', popUpImage);
         img.appendTo('#popUp p');
         $('#popUp #article-link').addClass("hidden");
       }
-      else if(nasaIndicator===0){
+      else if(nasaIndicator===0){ //for all non-nasa sources
         $('#popUp p').html(popUpContent);
         $('#popUp #article-link').removeClass("hidden");
         $('#popUp #article-link').attr('href', popUpLink);
       }
-      $closer.on("click", function(){ //event listner for X
+      $closer.on("click", function(){ //event listner for X to exit
         $popUp.addClass("hidden");
 
       });
@@ -223,7 +219,7 @@ function appendMainFeed(handlebarArray){
   });
 }
 
-//function that toggles popUp------------------------
+//function that toggles popUp
 function popUpToggle(state){
   $(".closePopUp").text("");
   if(state==="off"){
@@ -236,9 +232,8 @@ function popUpToggle(state){
   }
 }
 
-//Create pulledData object for MASHABLE -----------------
+//Create pulledData object for MASHABLE
 function mashableAssignments(JSONresp){
-
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
   $sourceName.text("Mashable");
@@ -261,10 +256,10 @@ function mashableAssignments(JSONresp){
       }
     );
   }
-//compile the data and load into DOM
   appendMainFeed(pulledData.content);
 }
 
+//Create pulledData object for bbc
 function bbcAssignments(JSONresp){
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
@@ -288,10 +283,10 @@ function bbcAssignments(JSONresp){
       }
     );
   }
-//compile the data and load into DOM
   appendMainFeed(pulledData.content);
 }
 
+//converts UNIX timestamp to an actual date
 function timeConverter(UNIX_timestamp){
   var a = new Date(UNIX_timestamp * 1000);
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -302,6 +297,7 @@ function timeConverter(UNIX_timestamp){
   return time;
 }
 
+//Create pulledData object for openWeather
 function weatherAssignments(JSONresp){
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
@@ -323,6 +319,7 @@ function weatherAssignments(JSONresp){
     var jcloudiness = 'Cloudiness: ' + JSONresp.list[element].clouds + '%';
     var jcontent = 'Max Temp: ' + jmax + '\xB0F' + '<br />' + 'Min Temp: ' + jmin + '\xB0F' + '<br />' + jpressure + '<br />' + jhumidity + '<br />' + jcloudiness;
 
+    var jdate = moment(jdate).format('dddd MM/DD/YYYY');
 //define each object and load into the array
     pulledData.content.push(
       {title: jdate,
@@ -334,10 +331,10 @@ function weatherAssignments(JSONresp){
       }
     );
   }
-//compile the data and load into DOM
   appendMainFeed(pulledData.content);
 }
 
+//creates weather codes for returning the correct image
 function returnWeatherCode(id){
     if(id<299){
       return '11d';
@@ -368,13 +365,12 @@ function returnWeatherCode(id){
     }
 }
 
-
+//Create pulledData object for NASA
 function nasaAssignments(JSONresp){
   pulledData.content = []; //array with all the objects for handlebars
   var $sourceName = $("#source-name");
   $sourceName.text("NASA Pics");
 
-  //console.log(JSONresp1[0]);
 //create each article object and push into array
   for (var element in JSONresp){
     var jtitle = JSONresp[element].title;
@@ -382,6 +378,9 @@ function nasaAssignments(JSONresp){
     var jimage = JSONresp[element].url;
     var jcontent = JSONresp[element].explanation;
 //define each object and load into the array
+
+    var jshares = moment(jshares).format('dddd MM/DD/YYYY');
+
     pulledData.content.push(
       {title: jtitle,
       shares: jshares,
@@ -390,6 +389,5 @@ function nasaAssignments(JSONresp){
       }
     );
   }
-//compile the data and load into DOM
   appendMainFeed(pulledData.content);
 }
