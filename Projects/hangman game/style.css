@@ -1,0 +1,96 @@
+* {
+  margin: 0;
+  padding: 0;
+  color: black;
+  background-color: antiquewhite;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+
+#letter-input li {
+  background-color: white;
+  display: inline-block;
+  margin: 0 10px 10px 0;
+  list-style:none;
+  width:35px;
+  height:30px;
+  padding-top:10px;
+  cursor:pointer;
+  border: 1px solid;
+  border-radius: 6px;
+  text-align: center;
+}
+
+#individual-letter:hover{
+  background: gray;
+  border: solid 1px white;
+  color: white;
+}
+
+#letter-blanks{
+  height: 150px;
+}
+#letter-guess {
+  border-bottom: 2px solid;
+  display: inline-block;
+  bottom: 0;
+  margin: 0 10px 10px 0;
+  list-style:none;
+  width:35px;
+  height:80px;
+  padding-top:10px;
+  text-align: center;
+  font-size: 50px;
+}
+
+.used {
+  color: lightgray;
+}
+
+#letter-buttons{
+
+  text-align: center;
+  display: block;
+}
+
+#mylives{
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid;
+  height: 50px;
+  width: 50px;
+  text-align: center;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.main {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  height: 100%;
+}
+
+#button-container{
+  display: block;
+  height: 30px;
+  width: 100%;
+}
+
+#new-game{
+  color: black;
+  padding: 10px;
+  margin: auto;
+  background-color: skyblue;
+  font-weight: 600;
+  font-size: 20px;
+}
+
+#player{
+  font-weight: 800;
+  font-size: 30px;
+}
