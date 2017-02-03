@@ -7,13 +7,22 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans::300italic,300,600,800" rel="stylesheet">
     <script src="app.js"></script>
     <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
-    <title></title>
+    <title>Hangman</title>
   </head>
   <body>
+    <header id="title">
+      HANGMAN
+      <div id="subtitle">
+        - Head to Head -
+      </div>
+    </header>
+    <canvas id="myCanvas" width="100" height="150">
+    Your browser does not support the HTML5 canvas tag.</canvas>
     <div class="main">
+      <div id="messages">
+      </div>
       <div id="player"></div>
       <div class="hangman-game">
-        <p id="mylives"></p>
 
         <div id="letter-container">
             <!-- letter spaces for game -->
@@ -26,6 +35,7 @@
     </div>
     <div id="button-container">
       <button id="new-game"> New Game </button>
+      <button id="reset"> Reset </button>
     </div>
   </body>
 </html>

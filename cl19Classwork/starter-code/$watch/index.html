@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <title>Angular Secrets Revealed!</title>
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- angular cdn -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+    <!-- js script -->
+    <script src="./app.js"></script>
+  </head>
+
+  <body ng-app="watchApp">
+
+    <!-- angular data-binding example -->
+    <div class="container">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Automatic DOM Binding</h3>
+        </div>
+        <div class="panel-body">
+          <div class="form-group">
+            <label>Enter some text!</label>
+            <input type="text" class="form-control" ng-model="user.name">
+            <h3>
+              Watch your text bind to the DOM as you type:
+              <br>
+              <span class="text-muted">
+                {{user.name}}
+              </span>
+            </h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- challenge -->
+    <div ng-controller="RegistrationController as registration" class="container">
+      <div class="panel panel-warning">
+          <div class="panel-heading">
+              <h3 class="panel-title">Create Account</h3>
+          </div>
+          <div class="panel-body">
+
+              <form role="form">
+                  <div class="form-group">
+                      <label>Email address</label>
+                      <input class="form-control" placeholder="Email address">
+                  </div>
+                  <div class="form-group">
+                      <label>Password</label>
+                      <input class="form-control" placeholder="Password">
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+              </form>
+
+          </div>
+      </div>
+    </div>
+
+  </body>
+</html>
