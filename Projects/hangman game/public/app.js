@@ -32,9 +32,9 @@ var alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
       't', 'u', 'v', 'w', 'x', 'y', 'z'];
 
 $(document).ready(function () {
+  var gameStatus;
 
   //pull game status value
-  var gameStatus;
   database.ref('Game Status').on('value', function (results) {
     gameStatus = results.val();
     if(gameStatus===2){
@@ -133,7 +133,7 @@ $(document).ready(function () {
     reset();
   })
 
-  $('#new-game').on('click', function(event){
+  $('#new-game').on('click', function(event){ //new game event listener
     event.preventDefault();
     if(gameStatus===0){ //if game is new and no one is playing yet
       playerNum = 1;
@@ -142,9 +142,7 @@ $(document).ready(function () {
 
       database.ref('winner').set('');
       $('#messages').text('You are Player 1. Waiting for second player.');
-
       database.ref('Game Status').set(1);
-      //make dom element to say "waiting for player 2"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     }
     else if(gameStatus===1){ //if player one is ready, sets player two
       if(playerNum===1){
@@ -176,14 +174,16 @@ $(document).ready(function () {
   }
   })
 
-  $('#instructions').on('click', function(event){
+  $('#instructions').on('click', function(event){ //instruction button event listener
     $('.instruction-text').toggleClass('invisible');
   })
+
   makeLetters(); //attach letter inputs to DOM
 })
 
-function getWord(status) { //gets word from API
+//----------------------------------------------------------------------------------------
 
+function getWord(status) { //gets word from API
   $.ajax({
         url: randomWordUrl,
         data: {
@@ -191,12 +191,7 @@ function getWord(status) { //gets word from API
         },
         // Work with the response
         success: function( response ) {
-          if(response.word[0] === response.word[0].toUpperCase()){ //check if returned word is uppercase (since API is stupid)
-            getWord(status); //run again until no upper cases
-          }
-          else{
           uploadWord(response.word);
-        }
         },
         error: function() {
           alert('Error: Cannot load page');
@@ -205,7 +200,15 @@ function getWord(status) { //gets word from API
 }
 
 function uploadWord(word){ //uploads word to database
+  if(word[0] === word[0].toUpperCase()){ //check if returned word is uppercase (since API is stupid)
+    getWord(status); //run again until no upper cases
+  }
+  else if(word.indexOf('-')> -1){ //check if returnted word has a hyphen
+    getWord(status);
+  }
+  else{
   database.ref('word').set(word);
+  }
 }
 
 function makeLetterSpaces(word){ //makes blank spaces for each letter of guess word
@@ -228,6 +231,7 @@ function makeLetters(){ //make alphabet button inputs
     $alphabet.append($letter);
   }
   $('#letter-buttons').append($alphabet);
+
   //attach event listeners
   $('#letter-input').on('click', function (event) {
     if ( $(event.target).is( "li" ) ) { // prevent clicking of UL and changing class
@@ -403,39 +407,12 @@ function reset(){ //resets the game if necessary
 function move(number, playerID) {
   if(playerID===1){
     var $elem = $("#player1-bar");
-    //number = number - widthEnd1;
-  //  width1 = initialNum1;
-  //  widthEnd1 = width1 + number;
     $elem.css('width', number + '%');
   }
   else{
     var $elem = $("#player2-bar");
-  //  number = number - widthEnd2;
-  //  width2 = initialNum2;
-    //widthEnd2 = width2 + number;
     $elem.css('width', number + '%');
   }
 
-  // var id = setInterval(frame, 90);
-  //
-  // function frame() {
-  //   if(playerID===1){
-  // 		if (width1 >= widthEnd1) {
-  //           clearInterval(id);
-  //           initialNum1 = widthEnd1;
-  //       } else {
-  //           width1++;
-  //           $elem.css('width', width1 + '%');
-  //       }
-  //   }
-  //   else{
-  //     if (width2 >= widthEnd2) {
-  //           clearInterval(id);
-  //           initialNum2 = widthEnd2;
-  //       } else {
-  //           width2++;
-  //           $elem.css('width', width2 + '%');
-  //       }
-  //   }
-  // }
+
 }
