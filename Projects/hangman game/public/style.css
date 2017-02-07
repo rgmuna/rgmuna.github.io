@@ -14,20 +14,23 @@
    font-family: Old West; src: url('Old Town Regular.ttf');
  }
 
- header {
-   overflow: hidden;
+ #title h3{
+    overflow: hidden;
     font-family: Western;
-    font-size: 80px;
+    font-size: 50px;
     background-color: SaddleBrown;
-    height: 130px;
+    height: 50px;
     line-height: 85%;
     border: 3px solid;
     border-radius: 10px;
     text-align: center;
+    display: inline-block;
+    padding-left: 20px;
+    padding-right: 20px;
  }
 
- header #subtitle{
-   font-size: 50px;
+#subtitle{
+   font-size: 30px;
    font-family: Old West;
    background-color: inherit;
    line-height: 95%;
@@ -38,7 +41,7 @@
  #reset{
    border: 0px solid;
    background-color: transparent;
-   color: black;
+   color: gray;
  }
 
  /*progress{
@@ -54,17 +57,12 @@
 
 #messages{
     background-color: antiquewhite;
-    display: inline-block;
-    height: auto;
-    width: 500px;
     color: black;
     border: 1px solid;
-    text-align: center;
     margin: 10px;
     border-radius: 6px;
     font-weight: 600px;
     font-size: 30px;
-
 }
 
 #letter-input li {
@@ -98,11 +96,14 @@
   bottom: 0;
   margin: 0 10px 10px 0;
   list-style:none;
-  width:35px;
-  height: 95px;
+  min-width: 25px;
+  max-width: 50px;
+  height: 70px;
   padding-top:10px;
   text-align: center;
   font-size: 50px;
+  background-color: antiquewhite;
+  padding-bottom: 65px;
 }
 
 .used {
@@ -112,7 +113,7 @@
 #letter-buttons{
   display: block;
   text-align: center;
-  width: 400px;
+  max-width: 400px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -124,11 +125,6 @@ body {
   background-image: url('wood.jpg') !important;
   background-size: cover;
 
-}
-.main {
-  margin: auto;
-  width: auto;
-  height: 100%;
 }
 
 #button-container{
@@ -163,6 +159,10 @@ body {
   text-align: center;
   margin: 10px;
 }
+
+.canvs-xs{
+  max-width: 150px;
+}
 /*---------------------------------------------------------------------------------*/
 /* Remove the navbar's default margin-bottom and rounded borders */
 .navbar {
@@ -195,37 +195,11 @@ footer {
   }
   .row.content {height:auto;}
 }
-/*.middle-container{
-  position: relative;
-}*/
-.myProgress {
-  /*position: absolute;*/
-  /*bottom: 0;*/
-  /*transform: translateY(-150%);*/
-  width: 183px;
-  height: 80px;
-  background-color: antiquewhite;
-  -moz-transform:rotate(270deg); /* Firefox */
-  -webkit-transform:rotate(270deg);
-  text-align: center;
-}
-
-.myBar {
-  position: absolute;
-  width: 1%;
-  height: 100%;
-  background-color: #4CAF50;
-}
 
 .player-id{
   position: relative;
 }
-#player1-progress{
-    float: left;
-    margin-top: 55px;
-    margin-left: 150px;
-    border: 1px solid black;
-}
+
 .instruction-text{
   float: left;
   text-align: left;
@@ -235,50 +209,100 @@ footer {
 }
 
 .instruction-text li{
-  list-style: none;
   margin-bottom: 5px;
   padding: 5px;
-  background-color: antiquewhite;
-}
-
-.instruction-text span{
-  font-weight: bold;
-}
-
-#player2-progress{
-  overflow: hidden;
-    float: right;
-    margin-top: 55px;
-    margin-right: 150px;
-    border: 1px solid black;
-}
-#player2-bar{
-  background-color: darkorchid;
-}
-#player1-bar{
-  background-color: aqua;
-}
-
-.invisible{
-  visibility: hidden;
 }
 
 .navbar-inverse{
   background-color: transparent;
 }
 
-#letter-guess{
-  background-color: antiquewhite;
-  height: 70px;
-  width: 50px;
-  padding-bottom: 65px;
+
+.row-centered {
+    text-align: center;
 }
 
-.vcenter {
-    display: inline-block;
-    vertical-align: middle;
+.canvas-col{
+  max-width: 150px;
+  min-width: 150px;
+  margin: 0 auto;
+  display: block;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
 }
 
 .col-sm-4{
   height: 183px;
+}
+
+#ply1-bar{
+  float: right;
+}
+
+#ply2-bar{
+  float: left;
+}
+
+#bar1{
+  background-color: aqua;
+}
+
+#bar2{
+  background-color: darkorchid;
+}
+.progress-bar-vertical {
+  width: 60px;
+  min-height: 170px;
+  margin-right: 0px;
+  /*float: left;*/
+  display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+  display: -ms-flexbox;  /* TWEENER - IE 10 */
+  display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+  display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
+  align-items: flex-end;
+  -webkit-align-items: flex-end; /* Safari 7.0+ */
+}
+
+.progress-bar-vertical .progress-bar {
+  width: 100%;
+  height: 0;
+  -webkit-transition: height 0.6s ease;
+  -o-transition: height 0.6s ease;
+  transition: height 0.6s ease;
+}
+
+.navbar-collapse.collapse {
+  display: block!important;
+}
+
+.navbar-nav>li, .navbar-nav {
+  float: left !important;
+}
+
+.navbar-nav.navbar-right:last-child {
+  margin-right: -15px !important;
+}
+
+.navbar-right {
+  float: right!important;
+}
+
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height:auto;}
+}
+
+@media (min-width: 1200px) {
+  #messages{
+    text-align: center;
+  }
 }

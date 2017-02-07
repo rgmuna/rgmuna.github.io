@@ -406,12 +406,13 @@ function reset(){ //resets the game if necessary
 
 function move(number, playerID) {
   if(playerID===1){
-    var $elem = $("#player1-bar");
-    $elem.css('width', number + '%');
+    var $elem = $("#bar1");
+    // $elem.css('width', number + '%');
+    $elem.attr("style", "height: " + number + "%");
   }
   else{
-    var $elem = $("#player2-bar");
-    $elem.css('width', number + '%');
+    var $elem = $("#bar2");
+    $elem.attr("style", "height: " + number + "%");
   }
 
 
