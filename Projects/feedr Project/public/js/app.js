@@ -1,4 +1,4 @@
-
+//test test test
 
 //local server in terminal: http-server -p 3000
 
@@ -9,7 +9,7 @@ var nasaIndicator = 0; //used to indicate how to attach to DOM
 
 var bbcUrl = "https://newsapi.org/v1/articles?source=bbc-news&sortBy=top&apiKey=f3a927224af947e290a444fdae7242ca";
 var mashUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://mashable.com/stories.json"
-var weatherUrl = "http://api.openweathermap.org/data/2.5/forecast/daily?id=5368361&APPID=60a9e19468acc3046f659f9bc175f8a8&units=imperial"
+var weatherUrl = "https://accesscontrolalloworiginall.herokuapp.com/http://api.openweathermap.org/data/2.5/forecast/daily?id=5368361&APPID=60a9e19468acc3046f659f9bc175f8a8&units=imperial"
 var nasaUrl = 'https://api.nasa.gov/planetary/apod?api_key=H0RnwzmfBVSEpcfmVnUf9aGc8dh74vDGVNxuxrY5&date=' //add date to end YYYY-MM-DD
 
 //compile handlebars
