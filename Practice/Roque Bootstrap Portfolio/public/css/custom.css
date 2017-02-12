@@ -1,0 +1,161 @@
+.img-circle {
+    border-radius: 0;
+    height: auto;
+    width: auto;
+    max-width: 300px;
+    max-height: 300px;
+    /*border: 3px solid #2C3E50;*/
+    -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
+}
+
+.navbar-custom, header .intro-text .name {
+    font-family: 'Open Sans',"Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-transform: none !important;
+}
+
+.navbar-custom, header .intro-text .name {
+    font-family: 'Open Sans',"Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-transform: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans',"Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-transform: none !important;
+    font-weight: 700;
+}
+
+/*-----------------colors---------------------*/
+:root {
+  --main-nav-color: #DCD0C0;
+  --main-template-color: white;
+  --main-body-color: #233237;
+  --main-text-color: #DCD0C0;
+  --main-dark-text-color: #B82601;
+}
+
+.navbar-custom{
+  background: none !important;
+}
+
+header{
+  background: var(--main-template-color);
+  color: var(--main-dark-text-color) !important;
+  /*background-image: url("https://cdn.pixabay.com/photo/2016/10/29/20/49/seamless-1781533_960_720.png");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;*/
+
+}
+
+
+
+hr.star-light:after {
+    background-color: var(--main-template-color) !important;
+    color: var(--main-text-color) !important;
+}
+
+/*highlights nav bars when you move down*/
+.navbar-custom .navbar-nav li.active a, .navbar-custom .navbar-nav li.active a:active, .navbar-custom .navbar-nav li.active a:focus, .navbar-custom .navbar-nav li.active a:hover {
+    /*color: var(--main-template-color) !important;*/
+    /*background: var(--main-dark-text-color) !important;*/
+    /*border-bottom: 2px solid var(--main-dark-text-color);*/
+    padding: 0;
+    margin: 10px;
+}
+
+.navbar-custom .navbar-nav li.active a, .navbar-custom .navbar-nav li.active a:active, .navbar-custom .navbar-nav li.active a:focus, .navbar-custom .navbar-nav li.active a:hover :before{
+
+    border-bottom: 2px solid var(--main-dark-text-color);
+
+}
+
+
+
+a, a.active, a:active, a:focus{
+    color: var(--main-dark-text-color) !important;
+
+    background: none !important;
+}
+
+a:hover{
+  color: var(--main-body-color) !important;
+}
+
+#portfolio{
+  background: var(--main-body-color) !important;
+}
+
+hr.star-primary:after {
+    background-color: var(--main-body-color) !important;
+    color: var(--main-dark-text-color) !important;
+}
+
+ #portfolio h2{
+  color: var(--main-template-color) !important;
+  padding-bottom: 50px;
+}
+
+#contact h2{
+ color: var(--main-template-color) !important;
+ padding-bottom: 50px;
+}
+
+#about h2{
+ padding-bottom: 50px;
+}
+
+section.success {
+    background: var(--main-template-color) !important;
+    color: var(--main-body-color) !important;
+}
+
+body{
+  background-color: var(--main-body-color) !important;
+}
+
+footer .footer-above {
+    background-color: var(--main-dark-text-color) !important;
+    color: var(--main-template-color) !important;
+
+}
+
+#portfolio .portfolio-item .portfolio-link .caption:hover {
+    background: red;
+    position: absolute;
+    opacity: 0.6;
+    transition: all ease .5s;
+    -webkit-transition: all ease .5s;
+    -moz-transition: all ease .5s;
+}
+
+.btn-success {
+  background: var(--main-dark-text-color) !important;
+  border: var(--main-template-color) !important;
+  color: var(--main-template-color)  !important;
+}
+
+.fa-github:before {
+    color: var(--main-template-color) !important;
+}
+
+.fa-linkedin:before {
+    color: var(--main-template-color) !important;
+}
+.fa-facebook:before {
+    color: var(--main-template-color) !important;
+}
+.form-control{
+  color: var(--main-template-color) !important;
+}
+
+.btn-outline {
+  background-color: var(--main-dark-text-color) !important;
+  color: var(--main-template-color) !important;
+}
+
+.portfolio-modal .modal-content h2 {
+     margin-bottom: 30px; 
+    font-size: 3em;
+}
